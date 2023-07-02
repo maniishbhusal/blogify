@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}Thank You - Blogify{% endblock title %}
+
+{% block content %}
+{% include 'navbar.html' %}
+  <div class="container mt-5">
+    <div class="row justify-content-center">
+      <div class="col-lg-6">
+        <div class="alert alert-success" role="alert">
+          Your message has been successfully submitted. Thank you.
+        </div>
+        <a href="{% url 'home' %}" class="btn btn-primary">Go Back to Home Page</a>
+      </div>
+    </div>
+  </div>
+{% endblock content %}

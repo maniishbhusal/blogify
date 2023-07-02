@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}All Blogs - Blogify{% endblock title %}
+
+{% block content %}
+    {% include 'navbar.html' %}
+
+      <!-- Body start -->
+  <div class="container mt-5">
+    <div class="row">
+      {% for blog in blogs %}
+      <div class="col-lg-4 mb-3 mb-lg-4">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">{{ blog.title }}</h5>
+            <p class="card-text">{{ blog.description|truncatewords:30 }}</p>
+            <a href="{% url 'blog' blog.slug %}" class="btn btn-primary">Read More</a>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endblock content %}
+  <!-- Body end -->

@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+ {% load static %}
+
+{% block title %}About Us - Blogify{% endblock title %}
+
+{% block content %}
+{% include 'navbar.html' %}
+  <div class="container mt-5">
+
+    <h1 class="text-center mb-5">About Us</h1>
+    <div class="row">
+      <div class="col-lg-6">
+        <img src="{% static 'images/manish.jpg' %}" alt="Manish Bhusal" class="img-fluid">
+      </div>
+      <div class="col-lg-6">
+        <h2>Manish Bhusal</h2>
+        <p>
+          Hello! My name is Manish Bhusal, and I'm a passionate Django developer with a love for technology and the tech industry. I believe in continuous learning and strive to acquire new skills and knowledge every day.
+        </p>
+        <p>
+          I have expertise in HTML, CSS, JavaScript, Django, Python, Git, GitHub, Linux, and more. My goal is to create elegant and efficient web solutions that solve real-world problems and enhance the user experience.
+        </p>
+        <p>
+          I find great joy in tackling challenging problems and finding innovative solutions. I am constantly exploring new technologies, frameworks, and programming languages to broaden my skillset and stay up-to-date with industry trends.
+        </p>
+        <p>
+          Whether it's building dynamic web applications, optimizing performance, or collaborating with a team, I thrive in a fast-paced and collaborative environment. I believe in the power of teamwork and enjoy working with other passionate individuals to create exceptional software solutions.
+        </p>
+        <p>
+          Thank you for visiting my about us page. If you have any questions or would like to connect, feel free to <a class="text-decoration-none" href="{% url 'contact' %}">reach out to me</a>. I'm always excited to connect with like-minded individuals in the tech community!
+        </p>
+      </div>
+    </div>
+  </div>
+{% endblock content %}

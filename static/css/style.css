@@ -1,0 +1,22 @@
+.navbar {
+    background: linear-gradient(to right, #ff6e00, #ee0979);
+  }
+  
+  .navbar-brand {
+    font-size: 24px;
+    color: #fff;
+    font-weight: bold;
+  }
+  
+  .navbar-nav .nav-link {
+    font-size: 18px;
+    color: #fff !important;
+  }
+
+  .navbar-nav .nav-link:hover{
+      text-decoration:underline;
+  }
+
+  .read_more_btn:hover .read_more {
+      color: white !important;
+    }
