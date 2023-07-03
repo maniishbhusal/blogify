@@ -15,6 +15,7 @@
             <h5 class="card-title">{{ blog.title }}</h5>
             <p class="card-text">{{ blog.description|truncatewords:30 }}</p>
             <a href="{% url 'blog' blog.slug %}" class="btn btn-primary">Read More</a>
+            <span class="ms-2">{{ blog.date|date }} {{ blog.date|time }}</span>
           </div>
         </div>
       </div>
