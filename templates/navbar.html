@@ -14,6 +14,10 @@
           <a class="nav-link active" aria-current="page" href="{% url 'contact' %}">Contact</a>
         </li>
       </ul>
+      <form method="GET" action="/search" class="d-flex" role="search">
+        <input class="form-control mx-2" type="search" placeholder="Search" name="query" aria-label="Search">
+        <button class="btn btn-outline-light" type="submit">Search</button>
+      </form>
     </div>
   </div>
 </nav>

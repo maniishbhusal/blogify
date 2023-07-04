@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,HttpResponse
 from django.contrib import messages
 from .models import Blog,Contact
 
@@ -51,3 +51,11 @@ def thank_you(request):
     request.session['submitted'] = False
 
     return render(request, 'blog/thank_you.html')
+
+def search(request):
+    query=request.GET.get('query','')
+    searched_blogs=Blog.objects.filter(title__contains=query)
+    context={
+        'searched_blogs':searched_blogs
+    }
+    return render(request, 'blog/search.html',context)
