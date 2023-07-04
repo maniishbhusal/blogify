@@ -1,6 +1,8 @@
-from django.shortcuts import render,redirect,HttpResponse
+from django.shortcuts import render,redirect
 from django.contrib import messages
 from .models import Blog,Contact
+from django.db.models import Q
+
 
 
 # Create your views here.
@@ -53,9 +55,21 @@ def thank_you(request):
     return render(request, 'blog/thank_you.html')
 
 def search(request):
-    query=request.GET.get('query','')
-    searched_blogs=Blog.objects.filter(title__contains=query)
-    context={
-        'searched_blogs':searched_blogs
+    # Get the search query from the GET request and strip any leading/trailing whitespace
+    query = request.GET.get('query').strip()
+    if not query:
+        # If the search query is empty, redirect to the home page and display an error message
+        messages.error(request, 'Please enter a search query.')
+        return redirect('home')
+    
+    # Search for blog posts that contain the search query in the title or description
+    searched_blogs = Blog.objects.filter(Q(title__contains=query) | Q(description__contains=query))
+    context = {
+        'searched_blogs': searched_blogs,
+        'query': query
     }
-    return render(request, 'blog/search.html',context)
+    # Render the search results page
+    return render(request, 'blog/search.html', context)
+
+
+    

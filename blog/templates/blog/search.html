@@ -3,24 +3,37 @@
 {% block title %}Searched Blogs - Blogify{% endblock title %}
 
 {% block content %}
-    {% include 'navbar.html' %}
+{% include 'navbar.html' %}
 
-      <!-- Body start -->
-  <div class="container mt-5">
+<!-- Body start -->
+<div class="container mt-5">
     <div class="row">
-      {% for blog in searched_blogs %}
-      <div class="col-lg-4 mb-3 mb-lg-4">
-        <div class="card">
-          <div class="card-body">
-            <h5 class="card-title">{{ blog.title }}</h5>
-            <p class="card-text">{{ blog.description|truncatewords:30 }}</p>
-            <a href="{% url 'blog' blog.slug %}" class="btn btn-primary">Read More</a>
-            <span class="ms-2">{{ blog.date|date }} {{ blog.date|time }}</span>
-          </div>
+        {% if searched_blogs %}
+        {% for blog in searched_blogs %}
+        <div class="col-lg-4 mb-3 mb-lg-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ blog.title }}</h5>
+                    <p class="card-text">{{ blog.description|truncatewords:30 }}</p>
+                    <a href="{% url 'blog' blog.slug %}" class="btn btn-primary">Read More</a>
+                    <span class="ms-2">{{ blog.date|date }} {{ blog.date|time }}</span>
+                </div>
+            </div>
         </div>
-      </div>
-      {% endfor %}
+        {% endfor %}
+        {% else %}
+        <div class="alert alert-warning">
+            <p>Your search - <b>{{ query|truncatewords:14 }}</b> - did not match any documents.</p>
+            <p>Suggestions:</p>
+            <ul>
+                <li>Make sure that all words are spelled correctly.</li>
+                <li>Try different keywords.</li>
+                <li>Try more general keywords.</li>
+                <li>Try fewer keywords.</li>
+            </ul>
+        </div>
+        {% endif %}
     </div>
-  </div>
-  {% endblock content %}
-  <!-- Body end -->
+</div>
+{% endblock content %}
+<!-- Body end -->
