@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg">
+<nav class="navbar navbar-expand-lg p-3">
   <div class="container">
     <a class="navbar-brand" href="{% url 'home' %}">Blogify</a>
 
@@ -18,6 +18,25 @@
         <input class="form-control mx-2" type="search" placeholder="Search" name="query" aria-label="Search">
         <button class="btn btn-outline-light" type="submit">Search</button>
       </form>
+      <!-- Check if the user is authenticated and show the appropriate button(s) in the navbar -->
+      {% if user.is_authenticated %}
+      <ul class="navbar-nav ms-5">
+        <li class="nav-item">
+          <a href="{% url 'logout' %}" class="nav-link active btn btn-danger" aria-current="page">Logout</a>
+        </li>
+      </ul>
+      {% else %}
+      <ul class="navbar-nav ms-5">
+        <li class="nav-item">
+          <a class="nav-link active btn btn-danger" aria-current="page" href="{% url 'signup' %}">Sign Up</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active btn btn-outline-primary ms-3" aria-current="page" href="{% url 'login' %}">Sign
+            In</a>
+        </li>
+      </ul>
+      {% endif %}
+
     </div>
   </div>
 </nav>
