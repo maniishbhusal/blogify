@@ -4,6 +4,7 @@ from .models import Blog, Contact
 from django.db.models import Q
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 
 
 # Create your views here.
@@ -132,7 +133,7 @@ def signin(request):
 
     return render(request, 'blog/login.html')
 
-
+@login_required(login_url='login')
 def signout(request):
     # Log the user out
     logout(request)
