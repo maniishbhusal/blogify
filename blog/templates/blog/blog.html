@@ -15,6 +15,9 @@
 <hr>
 
 <div class="container mt-5">
+    {% if request.user.is_anonymous %}
+    <a href="{% url 'login' %}" class="fs-4 text-decoration-none text-secondary">(Login to post a comment)</a>
+    {% else %}
     <h1 class="my-4">Add a new comment</h1>
     <form action="{% url 'post_comment' %}" method="post">
         {% csrf_token %}
@@ -30,12 +33,15 @@
         </div>
         <button type="submit" class="btn btn-danger my-3">Post Comment</button>
     </form>
+    {% endif %}
 </div>
 
-<br>
 <div class="container">
     {% if comment_count > 0 %}
+    <br>
     <h1>Comments ({{ comment_count }})</h1>
+    {% else %}
+    <span class='text-secondary'>(Be the first to post a comment)</span>
     {% endif %}
     <hr>
     {% for comment in comments %}
