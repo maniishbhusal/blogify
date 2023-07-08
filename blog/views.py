@@ -1,10 +1,11 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from .models import Blog, Contact
+from .models import Blog, Contact, BlogComment
 from django.db.models import Q
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.db.models import Count
 
 
 # Create your views here.
@@ -17,8 +18,12 @@ def home(request):
 
 def detailed_blog(request, slug):
     blog = Blog.objects.get(slug=slug)
+    comments=BlogComment.objects.filter(blog=blog).order_by('-timestamp')
+    comment_count=comments.count()
     return render(request, 'blog/blog.html', {
-        'blog': blog
+        'blog': blog,
+        'comments':comments,
+        'comment_count':comment_count
     })
 
 
@@ -143,3 +148,20 @@ def signout(request):
 
     # Redirect the user to the home page
     return redirect('home')
+
+@login_required(login_url='login')
+def post_comment(request):
+    if request.method == "POST":
+        # Get the comments submitted by the user
+        comment=request.POST.get("comment")
+        user=request.user
+        blog_id=request.POST.get("blog_id")
+        blog=Blog.objects.get(id=blog_id)
+
+        # Create a new comment
+        comment=BlogComment.objects.create(comment=comment,user=user,blog=blog)
+        comment.save()
+        messages.success(request, 'Comment added successfully!')
+
+    # return redirect(f"blog/{blog.slug}")
+    return redirect('blog',slug=blog.slug)
