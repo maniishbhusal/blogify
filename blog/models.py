@@ -1,11 +1,12 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.timezone import now
+from tinymce.models import HTMLField
 
 # Create your models here.
 class Blog(models.Model):
     title = models.CharField(max_length=200)
-    description = models.TextField()
+    description = HTMLField()
     date = models.DateTimeField(auto_now_add=True)
     slug=models.SlugField(default="",null=False,unique=True)
 
