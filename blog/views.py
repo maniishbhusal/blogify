@@ -10,7 +10,8 @@ from django.db.models import Count
 
 # Create your views here.
 def home(request):
-    blogs = Blog.objects.all().order_by('-date')[:8]
+    # blogs = Blog.objects.all().order_by('-date')[:8]
+    blogs=Blog.objects.all().order_by('-views')[:8]
     return render(request, 'blog/home.html', {
         'blogs': blogs
     })
@@ -18,6 +19,8 @@ def home(request):
 
 def detailed_blog(request, slug):
     blog = Blog.objects.get(slug=slug)
+    blog.views += 1
+    blog.save()
     comments=BlogComment.objects.filter(blog=blog).order_by('-timestamp')
     comment_count=comments.count()
     return render(request, 'blog/blog.html', {
