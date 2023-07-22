@@ -6,12 +6,13 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 # Create your views here.
 def home(request):
     # blogs = Blog.objects.all().order_by('-date')[:8]
-    blogs=Blog.objects.all().order_by('-views')[:8]
+    blogs = Blog.objects.all().order_by('-views')[:8]
     return render(request, 'blog/home.html', {
         'blogs': blogs
     })
@@ -21,19 +22,31 @@ def detailed_blog(request, slug):
     blog = Blog.objects.get(slug=slug)
     blog.views += 1
     blog.save()
-    comments=BlogComment.objects.filter(blog=blog).order_by('-timestamp')
-    comment_count=comments.count()
+    comments = BlogComment.objects.filter(blog=blog).order_by('-timestamp')
+    comment_count = comments.count()
     return render(request, 'blog/blog.html', {
         'blog': blog,
-        'comments':comments,
-        'comment_count':comment_count
+        'comments': comments,
+        'comment_count': comment_count
     })
 
 
 def all_blogs(request):
     blogs = Blog.objects.all().order_by('-date')
+    paginator = Paginator(blogs, 4)
+    total_pages=paginator.num_pages
+    page = request.GET.get('page')
+    try:
+        page_obj = paginator.get_page(page)
+    except PageNotAnInteger:
+        # if page is not an integer deliver the first
+        page_obj = paginator.page(1)
+    except EmptyPage:
+        # if page is out of range deliver last page of results
+        page_obj = paginator.page(total_pages)
     return render(request, 'blog/all_blogs.html', {
-        'blogs': blogs
+        'blogs': page_obj,
+        "total_page_lists":[n+1 for n in range(total_pages)] # if you want to show page number list
     })
 
 
@@ -88,6 +101,7 @@ def search(request):
     # Render the search results page
     return render(request, 'blog/search.html', context)
 
+
 def signup(request):
     if request.method == "POST":
         # Get the form data submitted by the user
@@ -141,6 +155,7 @@ def signin(request):
 
     return render(request, 'blog/login.html')
 
+
 @login_required(login_url='login')
 def signout(request):
     # Log the user out
@@ -152,19 +167,21 @@ def signout(request):
     # Redirect the user to the home page
     return redirect('home')
 
+
 @login_required(login_url='login')
 def post_comment(request):
     if request.method == "POST":
         # Get the comments submitted by the user
-        comment=request.POST.get("comment")
-        user=request.user
-        blog_id=request.POST.get("blog_id")
-        blog=Blog.objects.get(id=blog_id)
+        comment = request.POST.get("comment")
+        user = request.user
+        blog_id = request.POST.get("blog_id")
+        blog = Blog.objects.get(id=blog_id)
 
         # Create a new comment
-        comment=BlogComment.objects.create(comment=comment,user=user,blog=blog)
+        comment = BlogComment.objects.create(
+            comment=comment, user=user, blog=blog)
         comment.save()
         messages.success(request, 'Comment added successfully!')
 
     # return redirect(f"blog/{blog.slug}")
-    return redirect('blog',slug=blog.slug)
+    return redirect('blog', slug=blog.slug)

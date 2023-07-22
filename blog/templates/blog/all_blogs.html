@@ -21,6 +21,29 @@
       </div>
       {% endfor %}
     </div>
+    
+    <hr>
+    <br>
+    <!-- Pagination Start -->
+    <nav aria-label="Page navigation example">
+      <ul class="pagination justify-content-center">
+        {% if blogs.has_previous %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{ blogs.previous_page_number }}">Previous</a>
+        </li>
+        {% endif %}
+
+        {% for n in total_page_lists %}
+        <li class="page-item"><a class="page-link" href="?page={{ n }}">{{ n }}</a></li>
+        {% endfor %}
+        {% if blogs.has_next %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{ blogs.next_page_number }}">Next</a>
+        </li>
+        {% endif %}
+      </ul>
+    </nav>
+    <!-- Pagination End -->
   </div>
   {% endblock content %}
   <!-- Body end -->
