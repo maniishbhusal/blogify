@@ -32,10 +32,9 @@ def detailed_blog(request, slug):
 
 
 def all_blogs(request):
-    blogs = Blog.objects.all().order_by('-date')
+    blogs = Blog.objects.defer('views').order_by('-date').only('title', 'description', 'date', 'slug')
     paginator = Paginator(blogs, 4)
-    total_pages=paginator.num_pages
-    page = request.GET.get('page')
+    page = request.GET.get('page', 1)
     try:
         page_obj = paginator.get_page(page)
     except PageNotAnInteger:
@@ -43,10 +42,11 @@ def all_blogs(request):
         page_obj = paginator.page(1)
     except EmptyPage:
         # if page is out of range deliver last page of results
+        total_pages = paginator.num_pages
         page_obj = paginator.page(total_pages)
     return render(request, 'blog/all_blogs.html', {
         'blogs': page_obj,
-        "total_page_lists":[n+1 for n in range(total_pages)] # if you want to show page number list
+        "total_page_lists": paginator.page_range  # if you want to show page number list
     })
 
 
